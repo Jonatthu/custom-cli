@@ -3,6 +3,8 @@ using McMaster.Extensions.CommandLineUtils;
 
 namespace CustomCli
 {
+    // PS C:\Users\jnungaray\Desktop\CustomCli> dotnet publish -c Release -r win10-x64
+    // PS C:\Users\jnungaray\Desktop\CustomCli\src\CustomCli\bin\Release\netcoreapp2.1\win10-x64> .\CustomCli.exe serve -h
     [Command(Name = "gtr", Description = "Generatthor comes to generate your entire solution.")]
     [Subcommand("build", typeof(Build))]
     [Subcommand("serve", typeof(Serve))]
