@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Text;
+using System.Threading;
 using McMaster.Extensions.CommandLineUtils;
+using ShellProgressBar;
 
 namespace CustomCli
 {
@@ -31,8 +34,33 @@ namespace CustomCli
             {
                 Console.WriteLine($"Hello {subject}!");
             }
+
+            const int totalTicks = 15;
+            var options = new ProgressBarOptions
+            {
+                //ProgressCharacter = '─',
+                DisplayTimeInRealTime = true,
+                ProgressBarOnBottom = true,
+                ForegroundColor = ConsoleColor.Gray,
+                ForegroundColorDone = ConsoleColor.DarkGreen,
+                BackgroundColor = ConsoleColor.DarkGray,
+                EnableTaskBarProgress = true,
+                BackgroundCharacter = '\u2593'
+            };
+            using (var pbar = new ProgressBar(totalTicks, "Building TyNet Api", options))
+            {
+                TickToCompletion(pbar, totalTicks, sleep: 500);
+            }
         }
 
+        private void TickToCompletion(ProgressBar pbar, int totalTicks, int sleep)
+        {
+            for (int i = 0; i < totalTicks; i++)
+            {
+                pbar.Tick();
+                Thread.Sleep(sleep);
+            }
+        }
 
         [Command("build", Description = "Builds and generates the Generated Project.")]
         private class Build
@@ -76,9 +104,23 @@ namespace CustomCli
                 {
                     Console.WriteLine($"Hello {subject}!");
                 }
+
+                const int totalTicks = 10;
+                var options = new ProgressBarOptions
+                {
+                    ProgressCharacter = '─',
+                    ProgressBarOnBottom = true
+                };
+                using (var pbar = new ProgressBar(totalTicks, "Initial message", options))
+                {
+                    pbar.Tick(); //will advance pbar to 1 out of 10.
+                    //we can also advance and update the progressbar text
+                    pbar.Tick("Step 2 of 10");
+                }
             }
 
         }
 
     }
+
 }
