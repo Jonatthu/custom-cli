@@ -49,7 +49,8 @@ namespace CustomCli
             };
             using (var pbar = new ProgressBar(totalTicks, "Building TyNet Api", options))
             {
-                TickToCompletion(pbar, totalTicks, sleep: 500);
+                TickToCompletion(pbar, totalTicks, sleep: 200);
+                pbar.Message = "TyNET has been completed.";
             }
         }
 
@@ -58,6 +59,7 @@ namespace CustomCli
             for (int i = 0; i < totalTicks; i++)
             {
                 pbar.Tick();
+                pbar.Message = $"Doing the step {i + 1}";
                 Thread.Sleep(sleep);
             }
         }
