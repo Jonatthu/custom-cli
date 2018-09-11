@@ -1,15 +1,35 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "build",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "build",
-                "${workspaceFolder}/src/CustomCli/CustomCli.csproj"
-            ],
-            "problemMatcher": "$msCompile"
-        }
-    ]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build CustomCli",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "build",
+        "${workspaceFolder}/src/CustomCli/CustomCli.csproj"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "build ConcurrentLib",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "build",
+        "${workspaceFolder}/src/ConcurrentLib/ConcurrentLib.csproj"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "build InterfaceFluentApi",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "build",
+        "${workspaceFolder}/src/InterfaceFluentApi/InterfaceFluentApi.csproj"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+  ]
 }

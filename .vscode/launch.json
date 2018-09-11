@@ -1,28 +1,62 @@
 {
-   // Use IntelliSense to find out which attributes exist for C# debugging
-   // Use hover for the description of the existing attributes
-   // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
-   "version": "0.2.0",
-   "configurations": [
-        {
-            "name": ".NET Core Launch (console)",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build",
-            // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/src/CustomCli/bin/Debug/netcoreapp2.1/CustomCli.dll",
-            "args": ["serve", "-s", "Foooo", "-n", "3"],
-            "cwd": "${workspaceFolder}/src/CustomCli",
-            // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
-            "console": "internalConsole",
-            "stopAtEntry": false,
-            "internalConsoleOptions": "openOnSessionStart"
-        },
-        {
-            "name": ".NET Core Attach",
-            "type": "coreclr",
-            "request": "attach",
-            "processId": "${command:pickProcess}"
-        }
-    ,]
+  // Use IntelliSense to find out which attributes exist for C# debugging
+  // Use hover for the description of the existing attributes
+  // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "CustomCli Launch (console)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build CustomCli",
+      // If you have changed target frameworks, make sure to update the program path.
+      "program": "${workspaceFolder}/src/CustomCli/bin/Debug/netcoreapp2.1/CustomCli.dll",
+      "args": [
+        "serve",
+        "-s",
+        "Foooo",
+        "-n",
+        "3"
+      ],
+      "cwd": "${workspaceFolder}/src/CustomCli",
+      // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
+      "console": "internalConsole",
+      "stopAtEntry": false,
+      "internalConsoleOptions": "openOnSessionStart"
+    },
+    {
+      "name": "ConcurrentLib Launch (console)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build ConcurrentLib",
+      // If you have changed target frameworks, make sure to update the program path.
+      "program": "${workspaceFolder}/src/ConcurrentLib/bin/Debug/netcoreapp2.1/ConcurrentLib.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/src/ConcurrentLib",
+      // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
+      "console": "internalConsole",
+      "stopAtEntry": false,
+      "internalConsoleOptions": "openOnSessionStart"
+    },
+    {
+      "name": "InterfaceFluentApi Launch (console)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build InterfaceFluentApi",
+      // If you have changed target frameworks, make sure to update the program path.
+      "program": "${workspaceFolder}/src/InterfaceFluentApi/bin/Debug/netcoreapp2.1/InterfaceFluentApi.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/src/InterfaceFluentApi",
+      // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
+      "console": "internalConsole",
+      "stopAtEntry": false,
+      "internalConsoleOptions": "openOnSessionStart"
+    },
+    {
+      "name": ".NET Core Attach",
+      "type": "coreclr",
+      "request": "attach",
+      "processId": "${command:pickProcess}"
+    },
+  ]
 }
