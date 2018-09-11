@@ -1,33 +1,41 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 
 namespace InterfaceFluentApi.Extensions
 {
     public class GenEntityExtender<TEntity> where TEntity : class
     {
         private readonly Type entity = typeof(TEntity);
-        private readonly Dictionary<object, Parameter[]> propertyParameters = new Dictionary<object, Parameter[]>();
+        private readonly Dictionary<MemberInfo, Parameter[]> propertyParameters = new Dictionary<MemberInfo, Parameter[]>();
         private readonly List<ComputedProperty> computedRequestProperties = new List<ComputedProperty>();
         private readonly List<ComputedProperty> computedResponseProperties = new List<ComputedProperty>();
         private readonly Dictionary<ComputedProperty, Parameter[]> computedResponsePropertyParameters = new Dictionary<ComputedProperty, Parameter[]>();
 
         public GenEntityExtender() { }
 
-        public GenEntityExtender<TEntity> AddPropertyParameters(Func<TEntity, object> property, params Parameter[] parameters)
+        public GenEntityExtender<TEntity> AddPropertyParameters(Expression<Func<TEntity, object>> property, params Parameter[] parameters)
         {
-            _checkUniqueness(parameters);
+            _checkParametersUniqueness(parameters);
 
-            if (propertyParameters.TryGetValue(property, out Parameter[] outParameters))
+            MemberExpression body = property.Body as MemberExpression;
+
+            if (body == null)
             {
-                List<Parameter> newParameters = parameters.ToList();
-                newParameters.AddRange(outParameters);
-                outParameters = newParameters.ToArray();
+                UnaryExpression ubody = (UnaryExpression)property.Body;
+                body = ubody.Operand as MemberExpression;
             }
-            else
+
+            MemberInfo memberInfo = body.Member;
+
+            if (propertyParameters.Keys.Any(x => x.Name == memberInfo.Name))
             {
-                propertyParameters.Add(property, parameters);
+                throw new Exception($"Property `{memberInfo.Name}` on Entity `{entity.Name}` has been already configured, please try to remove repeated configs.");
             }
+
+            propertyParameters.Add(memberInfo, parameters);
 
             return this;
         }
@@ -52,7 +60,7 @@ namespace InterfaceFluentApi.Extensions
         public GenEntityExtender<TEntity> AddResponseProperty<TPropertyType>(string name, params Parameter[] parameters)
         {
 
-            _checkUniqueness(parameters);
+            _checkParametersUniqueness(parameters);
 
             if (computedResponseProperties.Any(x => x.Name == name))
             {
@@ -72,7 +80,7 @@ namespace InterfaceFluentApi.Extensions
             return this;
         }
 
-        private void _checkUniqueness(Parameter[] parameters)
+        private void _checkParametersUniqueness(Parameter[] parameters)
         {
             List<Parameter> computedLocalParameters = new List<Parameter>();
 
