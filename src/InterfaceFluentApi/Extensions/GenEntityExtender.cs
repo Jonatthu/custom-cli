@@ -16,7 +16,7 @@ namespace InterfaceFluentApi.Extensions
 
         public GenEntityExtender() { }
 
-        public GenEntityExtender<TEntity> AddPropertyParameters(Expression<Func<TEntity, object>> property, params Parameter[] parameters)
+        public GenEntityExtender<TEntity> AddPropertyParameters<R>(Expression<Func<TEntity, R>> property, params Parameter[] parameters)
         {
             _checkParametersUniqueness(parameters);
 

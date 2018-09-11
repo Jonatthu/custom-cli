@@ -53,6 +53,20 @@
       "internalConsoleOptions": "openOnSessionStart"
     },
     {
+      "name": "ProgressBarTechniques Launch (console)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build ProgressBarTechniques",
+      // If you have changed target frameworks, make sure to update the program path.
+      "program": "${workspaceFolder}/src/ProgressBarTechniques/bin/Debug/netcoreapp2.1/ProgressBarTechniques.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/src/ProgressBarTechniques",
+      // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
+      "console": "internalConsole",
+      "stopAtEntry": false,
+      "internalConsoleOptions": "openOnSessionStart"
+    },
+    {
       "name": ".NET Core Attach",
       "type": "coreclr",
       "request": "attach",

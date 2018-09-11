@@ -31,5 +31,15 @@
       ],
       "problemMatcher": "$msCompile"
     },
+    {
+      "label": "build ProgressBarTechniques",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "build",
+        "${workspaceFolder}/src/ProgressBarTechniques/ProgressBarTechniques.csproj"
+      ],
+      "problemMatcher": "$msCompile"
+    },
   ]
 }
