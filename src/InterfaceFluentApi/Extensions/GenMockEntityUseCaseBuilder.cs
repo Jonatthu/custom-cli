@@ -104,8 +104,9 @@ namespace InterfaceFluentApi.Extensions
             {
 
                 //entity.GetProperty(memberInfo.Name).SetValue(entityInstance, )
+                // Activator.CreateInstance()
 
-                return builder;
+                return useCaseBuilder;
             }
         }
     }
