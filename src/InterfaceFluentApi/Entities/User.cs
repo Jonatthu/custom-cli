@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using ChanceNET;
 using InterfaceFluentApi.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -10,9 +12,11 @@ namespace InterfaceFluentApi.Entities
         public int Id { get; set; }
         public string Username { get; set; }
         public string FirstName { get; set; }
-        public DateTime Birthdate { get; set; }
+        public DateTime? Birthdate { get; set; }
+        public IEnumerable<Post> Posts { get; set; }
+        public Post MainPost { get; set; }
 
-        public GenEntityExtender<User> ExtendGenEntity(GenEntityExtender<User> builder)
+        public void ExtendGenEntity(GenEntityExtenderBuilder<User> builder)
         {
 
             builder
@@ -30,21 +34,20 @@ namespace InterfaceFluentApi.Entities
                     new Parameter<bool>("onlyFirstNameAndLastNameInitial")
                 );
 
-            return builder;
         }
 
-        public GenMockEntity<User> GenMockEntity(GenMockEntity<User> builder)
+        public void GenMockEntity(GenMockEntityDefinitionBuilder<User> builder)
         {
-            builder
-                .Property(x => x.Username, "username()")
-                .Property(x => x.Birthdate, "date(1986, 2015)")
-                .Property(x => x.FirstName, "name()")
-                ;
+            string firstName = builder.chance.FirstName();
 
-            return builder;
+            builder
+                .Property(x => x.Username, firstName)
+                .Property(x => x.FirstName, firstName)
+                .Property(x => x.Birthdate, c => c.Birthday(AgeRanges.Adult))
+            ;
         }
 
-        public EntityTypeBuilder<User> ModelBuildGenEntity(EntityTypeBuilder<User> modelBuilder)
+        public void ModelBuildGenEntity(EntityTypeBuilder<User> modelBuilder)
         {
             modelBuilder
                 .HasIndex(x => x.Username)
@@ -54,7 +57,6 @@ namespace InterfaceFluentApi.Entities
                 .Property(x => x.Username)
                 .IsRequired(false);
 
-            return modelBuilder;
         }
     }
 }

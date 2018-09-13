@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace InterfaceFluentApi.Extensions
 {
-    public class GenEntityExtender<TEntity> where TEntity : class
+    public sealed class GenEntityExtenderBuilder<TEntity> where TEntity : class
     {
         private readonly Type entity = typeof(TEntity);
         private readonly Dictionary<MemberInfo, Parameter[]> propertyParameters = new Dictionary<MemberInfo, Parameter[]>();
@@ -14,9 +14,9 @@ namespace InterfaceFluentApi.Extensions
         private readonly List<ComputedProperty> computedResponseProperties = new List<ComputedProperty>();
         private readonly Dictionary<ComputedProperty, Parameter[]> computedResponsePropertyParameters = new Dictionary<ComputedProperty, Parameter[]>();
 
-        public GenEntityExtender() { }
+        public GenEntityExtenderBuilder() { }
 
-        public GenEntityExtender<TEntity> AddPropertyParameters<R>(Expression<Func<TEntity, R>> property, params Parameter[] parameters)
+        public GenEntityExtenderBuilder<TEntity> AddPropertyParameters<R>(Expression<Func<TEntity, R>> property, params Parameter[] parameters)
         {
             _checkParametersUniqueness(parameters);
 
@@ -40,7 +40,7 @@ namespace InterfaceFluentApi.Extensions
             return this;
         }
 
-        public GenEntityExtender<TEntity> AddRequestProperty<TPropertyType>(string name)
+        public GenEntityExtenderBuilder<TEntity> AddRequestProperty<TPropertyType>(string name)
         {
 
             if (computedRequestProperties.Any(x => x.Name == name))
@@ -57,7 +57,7 @@ namespace InterfaceFluentApi.Extensions
             return this;
         }
 
-        public GenEntityExtender<TEntity> AddResponseProperty<TPropertyType>(string name, params Parameter[] parameters)
+        public GenEntityExtenderBuilder<TEntity> AddResponseProperty<TPropertyType>(string name, params Parameter[] parameters)
         {
 
             _checkParametersUniqueness(parameters);

@@ -1,7 +1,9 @@
+using ChanceNET;
+
 namespace InterfaceFluentApi.Extensions
 {
-    public interface IGenMockEntity<TEntity> where TEntity : class
+    public interface IGenMockEntity<TEntity> where TEntity : class, new()
     {
-        GenMockEntity<TEntity> GenMockEntity(GenMockEntity<TEntity> builder);
+        void GenMockEntity(GenMockEntityDefinitionBuilder<TEntity> builder);
     }
 }
