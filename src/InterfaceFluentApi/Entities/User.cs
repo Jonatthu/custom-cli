@@ -38,11 +38,11 @@ namespace InterfaceFluentApi.Entities
 
         public void GenMockEntity(GenMockEntityDefinitionBuilder<User> builder)
         {
-            Func<Chance, string> firstNameFunc = c => c.FirstName();
+            string firstName = builder.chance.FirstName();
 
             builder
-                .Property(x => x.Username, firstNameFunc, v => v.ToLower())
-                .Property(x => x.FirstName, firstNameFunc)
+                .Property(x => x.Username, c => firstName.ToLower())
+                .Property(x => x.FirstName, c => firstName)
                 .Property(x => x.Birthdate, c => c.Birthday(AgeRanges.Adult))
             ;
         }

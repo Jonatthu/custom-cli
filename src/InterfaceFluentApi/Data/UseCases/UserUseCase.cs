@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ChanceNET;
 using InterfaceFluentApi.Entities;
 using InterfaceFluentApi.Extensions;
 
@@ -13,12 +14,15 @@ namespace InterfaceFluentApi.Data.UseCases
         public override void DefineUseCase(GenMockEntityUseCaseBuilder<User> builder)
         {
             builder
-
-                .NavigationCollection<Post>(x => x.Posts)
-                    .RedifineMockEntity(b => {
-                        b.Property(x => x.Message, c => c.Phone());
+                .Navigation(x => x.Posts)
+                    .Generate(20)
+                .Navigation(x => x.MainPost)
+                    .Redifine(b => {
+                        b.Property(x => x.Message, c => "Hello World");
                     })
-                    .NumberOfElements(234)
+                    .Generate()
+                .Property(x => x.Birthdate, c => c.Date(2015, Month.March, 12))
+                .Generate(20)
             ;
         }
     }

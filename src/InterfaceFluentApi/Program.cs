@@ -43,9 +43,7 @@ namespace InterfaceFluentApi
             {
                 GenMockEntityDefinitionBuilder<User> builderMock = new GenMockEntityDefinitionBuilder<User>(chance);
                 type.InvokeMember(nameof(IGenMockEntity<User>.GenMockEntity), BindingFlags.InvokeMethod, null, userInstance, new object[] { builderMock });
-                //users[i] = builderMock.entityInstance;
-                var value = builderMock.propertyDefinitions.First().Value.ValueFunc(chance);
-                var valueafter = builderMock.propertyDefinitions.First().Value.ModifyFunc(chance);
+                users[i] = builderMock.instance;
             }
 
             var connection = new SqliteConnection("DataSource=:memory:");
