@@ -1,4 +1,4 @@
-namespace InterfaceFluentApi.Extensions
+namespace InterfaceFluentApi.Extensions.GenMockApi
 {
     public enum GenMockUseCaseRunFromEnum
     {

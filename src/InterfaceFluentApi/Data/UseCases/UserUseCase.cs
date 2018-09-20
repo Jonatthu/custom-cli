@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using ChanceNET;
 using InterfaceFluentApi.Entities;
 using InterfaceFluentApi.Extensions;
+using InterfaceFluentApi.Extensions.GenMockApi;
 
 namespace InterfaceFluentApi.Data.UseCases
 {
@@ -15,13 +17,19 @@ namespace InterfaceFluentApi.Data.UseCases
         {
             builder
                 .Navigation(x => x.Posts)
-                    .Generate(20)
+                    .Generate(20);
+
+            builder
                 .Navigation(x => x.MainPost)
-                    .Redifine(b => {
+                    .Redifine(b =>
+                    {
                         b.Property(x => x.Message, c => "Hello World");
                     })
-                    .Generate()
-                .Property(x => x.Birthdate, c => c.Date(2015, Month.March, 12))
+                    .Generate();
+
+            builder
+                .Property(x => x.Birthdate, c => new DateTime(2018, 2, 2))
+                .Property(x => x.FirstName, c => "Jonathan")
                 .Generate(20)
             ;
         }

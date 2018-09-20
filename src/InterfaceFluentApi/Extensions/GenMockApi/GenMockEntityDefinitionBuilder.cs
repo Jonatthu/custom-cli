@@ -5,13 +5,12 @@ using System.Linq.Expressions;
 using System.Reflection;
 using ChanceNET;
 
-namespace InterfaceFluentApi.Extensions
+namespace InterfaceFluentApi.Extensions.GenMockApi
 {
     public sealed class GenMockEntityDefinitionBuilder<TEntity> where TEntity : class, new()
     {
         public readonly Type entity = typeof(TEntity);
-        public readonly TEntity instance = new TEntity();
-        public readonly Dictionary<PropertyInfo, PropertyMockData> propertyDefinitions = new Dictionary<PropertyInfo, PropertyMockData>();
+        public readonly Dictionary<string, PropertyMockData> propertyDefinitions = new Dictionary<string, PropertyMockData>();
         public readonly Chance chance;
 
         public GenMockEntityDefinitionBuilder(Chance chance)
@@ -27,7 +26,7 @@ namespace InterfaceFluentApi.Extensions
         /// <returns></returns>
         public GenMockEntityDefinitionBuilder<TEntity> Property<TProperty>(
             Expression<Func<TEntity, TProperty>> property,
-            Func<Chance, TProperty> chanceFunction
+            Expression<Func<Chance, object>> chanceExpression
         )
         {
             MemberExpression body = property.Body as MemberExpression;
@@ -38,28 +37,37 @@ namespace InterfaceFluentApi.Extensions
                 throw new Exception($"Property `{body.Member.Name}` on Entity `{entity.Name}` is a navigation property, please use this builder only for properties and not for navigation properties, for this last ones use `UseCaseBuilder`.");
             }
 
-            TProperty value = chanceFunction(chance);
-
             PropertyMockData propertyMockData = new PropertyMockData
             {
-                ValueType = typeof(TProperty),
-                Value = value,
+                Property = propertyInfo,
+                ValueExpression = chanceExpression
             };
 
-            if (!propertyDefinitions.TryAdd(propertyInfo, propertyMockData))
+            if (!propertyDefinitions.TryAdd(propertyInfo.Name, propertyMockData))
             {
                 throw new Exception($"Property `{body.Member.Name}` on Entity `{entity.Name}` already Mocked, please remove duplicates.");
             }
 
-            propertyInfo.SetValue(instance, value);
 
             return this;
+        }
+
+        public TEntity GetEntityInstance()
+        {
+            TEntity entity = new TEntity();
+
+            foreach(KeyValuePair<string, PropertyMockData> item in this.propertyDefinitions)
+            {
+                item.Value.Property.SetValue(entity, item.Value.ValueExpression.Compile().Invoke(chance));
+            }
+
+            return entity;
         }
     }
 
     public class PropertyMockData
     {
-        public Type ValueType { get; set; }
-        public object Value { get; set; }
+        public PropertyInfo Property { get; set; }
+        public Expression<Func<Chance, object>> ValueExpression { get; set; }
     }
 }

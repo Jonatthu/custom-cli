@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using InterfaceFluentApi.Extensions;
+using InterfaceFluentApi.Extensions.GenMockApi;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace InterfaceFluentApi.Entities
@@ -16,7 +17,7 @@ namespace InterfaceFluentApi.Entities
         public void GenMockEntity(GenMockEntityDefinitionBuilder<Post> builder)
         {
             builder
-                .Property(x => x.Message, c => c.Sentence(100))
+                .Property(x => x.Message, c => c.Sentence(58, 0, false, false, '.'))
             ;
         }
 

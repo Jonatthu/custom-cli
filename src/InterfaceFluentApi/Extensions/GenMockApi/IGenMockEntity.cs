@@ -1,6 +1,6 @@
 using ChanceNET;
 
-namespace InterfaceFluentApi.Extensions
+namespace InterfaceFluentApi.Extensions.GenMockApi
 {
     public interface IGenMockEntity<TEntity> where TEntity : class, new()
     {

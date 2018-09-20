@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using ChanceNET;
 using InterfaceFluentApi.Extensions;
+using InterfaceFluentApi.Extensions.GenMockApi;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

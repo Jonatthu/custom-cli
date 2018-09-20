@@ -8,6 +8,7 @@ using ChanceNET;
 using InterfaceFluentApi.Data;
 using InterfaceFluentApi.Entities;
 using InterfaceFluentApi.Extensions;
+using InterfaceFluentApi.Extensions.GenMockApi;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
@@ -43,7 +44,7 @@ namespace InterfaceFluentApi
             {
                 GenMockEntityDefinitionBuilder<User> builderMock = new GenMockEntityDefinitionBuilder<User>(chance);
                 type.InvokeMember(nameof(IGenMockEntity<User>.GenMockEntity), BindingFlags.InvokeMethod, null, userInstance, new object[] { builderMock });
-                users[i] = builderMock.instance;
+                users[i] = builderMock.GetEntityInstance();
             }
 
             var connection = new SqliteConnection("DataSource=:memory:");
