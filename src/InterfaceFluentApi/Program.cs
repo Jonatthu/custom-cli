@@ -9,6 +9,7 @@ using InterfaceFluentApi.Data;
 using InterfaceFluentApi.Entities;
 using InterfaceFluentApi.Extensions;
 using InterfaceFluentApi.Extensions.GenMockApi;
+using InterfaceFluentApi.Extensions.GenMockApi.Models;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
@@ -37,14 +38,31 @@ namespace InterfaceFluentApi
 
 
             Chance chance = new Chance();
-            User[] users = new User[10];
+            var types = Assembly.GetExecutingAssembly().GetExportedTypes();
+            var igenMockEntityImplementors = types.SelectMany(x => x.GetInterfaces()).Where(x => x.Name == typeof(IGenMockEntity<>).Name);
+            var entities = igenMockEntityImplementors.Select(x => x.GenericTypeArguments.First());
+            int numberOfGens = 10;
+            Dictionary<string, MockEntityValued> mockedData = new Dictionary<string, MockEntityValued>();
 
-
-            for (int i = 0; i < users.Length; i++)
+            for(int i = 0; i < entities.Count(); i++)
             {
-                GenMockEntityDefinitionBuilder<User> builderMock = new GenMockEntityDefinitionBuilder<User>(chance);
-                type.InvokeMember(nameof(IGenMockEntity<User>.GenMockEntity), BindingFlags.InvokeMethod, null, userInstance, new object[] { builderMock });
-                users[i] = builderMock.GetEntityInstance();
+                Type entity = entities.ElementAt(i);
+                object entityInstance = Activator.CreateInstance(entity);
+                Type builderMock = typeof(GenMockEntityDefinitionBuilder<>).MakeGenericType(entity);
+                object[] data = new object[numberOfGens];
+
+                for (int j = 0; j < numberOfGens; j++)
+                {
+                    dynamic instanceBuilderMock = Activator.CreateInstance(builderMock, new object[] { chance });
+                    entity.InvokeMember(nameof(IGenMockEntity<object>.GenMockEntity), BindingFlags.InvokeMethod, null, entityInstance, new object[] { instanceBuilderMock });
+                    data[j] = instanceBuilderMock.GetEntityInstance();
+                }
+
+                mockedData.Add(entity.Name, new MockEntityValued {
+                    Type = entity,
+                    Data = data
+                });
+
             }
 
             var connection = new SqliteConnection("DataSource=:memory:");
@@ -62,7 +80,7 @@ namespace InterfaceFluentApi
 
             using (var dbContext = new MyDbContext(options))
             {
-                dbContext.AddRange(users);
+                //dbContext.AddRange(users);
                 dbContext.SaveChanges();
             }
 

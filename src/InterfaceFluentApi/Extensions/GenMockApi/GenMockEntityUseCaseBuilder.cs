@@ -11,7 +11,7 @@ namespace InterfaceFluentApi.Extensions.GenMockApi
     {
         private readonly Chance chance;
         public readonly Type entity = typeof(TEntity);
-        private readonly GenMockEntityDefinitionBuilder<TEntity> entityDefinitionBuilder;
+        public readonly GenMockEntityDefinitionBuilder<TEntity> entityBuilder;
 
         public GenMockEntityUseCaseBuilder(
             Chance chance,
@@ -19,7 +19,7 @@ namespace InterfaceFluentApi.Extensions.GenMockApi
         )
         {
             this.chance = chance;
-            this.entityDefinitionBuilder = entityDefinitionBuilder;
+            this.entityBuilder = entityDefinitionBuilder;
         }
 
         public NavigationCollectionConfig<TPropertyType> Navigation<TPropertyType>(
@@ -36,15 +36,6 @@ namespace InterfaceFluentApi.Extensions.GenMockApi
         {
             GenMockEntityDefinitionBuilder<TPropertyType> mockDefinition = new GenMockEntityDefinitionBuilder<TPropertyType>(chance);
             return new NavigationConfig<TPropertyType>(this, property, chance, entity);
-        }
-
-        public GenMockEntityUseCaseBuilder<TEntity> Property<TPropertyType>(
-            Expression<Func<TEntity, TPropertyType>> property,
-            Func<Chance, TPropertyType> chanceFunction
-        )
-        {
-
-            return this;
         }
 
         public void Generate(int numberOfElements)
@@ -86,7 +77,7 @@ namespace InterfaceFluentApi.Extensions.GenMockApi
 
             }
 
-            public NavigationConfig<TPropertyType> Redifine(Action<GenMockEntityDefinitionBuilder<TPropertyType>> definition)
+            public NavigationConfig<TPropertyType> EntityBuilder(Action<GenMockEntityDefinitionBuilder<TPropertyType>> definition)
             {
 
                 return this;
@@ -132,7 +123,7 @@ namespace InterfaceFluentApi.Extensions.GenMockApi
 
             }
 
-            public NavigationCollectionConfig<TPropertyType> Redifine(Action<GenMockEntityDefinitionBuilder<TPropertyType>> definition)
+            public NavigationCollectionConfig<TPropertyType> EntityBuilder(Action<GenMockEntityDefinitionBuilder<TPropertyType>> definition)
             {
                 return this;
             }

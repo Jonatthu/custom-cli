@@ -42,9 +42,12 @@ namespace InterfaceFluentApi.Entities
             string firstName = builder.chance.FirstName();
 
             builder
-                .Property(x => x.Username, c => firstName.ToLower())
-                .Property(x => x.FirstName, c => firstName)
-                .Property(x => x.Birthdate, c => c.Birthday(AgeRanges.Adult))
+                .Property(x => x.Username)
+                    .Value(c => firstName.ToLower())
+                .Property(x => x.FirstName)
+                    .Value(c => firstName)
+                .Property(x => x.Birthdate)
+                    .Value(c => c.Birthday(AgeRanges.Adult))
             ;
         }
 

@@ -21,17 +21,20 @@ namespace InterfaceFluentApi.Data.UseCases
 
             builder
                 .Navigation(x => x.MainPost)
-                    .Redifine(b =>
+                    .EntityBuilder(b =>
                     {
-                        b.Property(x => x.Message, c => "Hello World");
+                        b.Property(x => x.Message)
+                            .Value(c => "Hello World");
                     })
                     .Generate();
 
-            builder
-                .Property(x => x.Birthdate, c => new DateTime(2018, 2, 2))
-                .Property(x => x.FirstName, c => "Jonathan")
-                .Generate(20)
-            ;
+            builder.entityBuilder
+                .Property(x => x.Birthdate)
+                    .Value(c => new DateTime(2018, 2, 2))
+                .Property(x => x.FirstName)
+                    .Value(c => "Jonathan");
+
+            builder.Generate(20);
         }
     }
 }
